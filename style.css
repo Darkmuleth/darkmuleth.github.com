@@ -1,0 +1,122 @@
+
+        *{
+            margin: 0;
+        }
+        body,div,dd,ol,dl,ul,li,img,p,a,table,tr,th,td,label,span,frameset,frame,iframe,object,input[type='button'],input[type='reset'],input[type='button'],input[type='file'],select,h1,h2,h3,h4,h5{
+            padding: 0;
+        }
+        body{
+            text-align: center;
+            font-family: "Microsoft YaHei", sans-serif ! important;
+            font-size: 15px;
+            text-shadow: #445 2px 2px 2px;
+        }
+        .MainArea{
+            margin: 0 auto;
+            width: 966px;
+            background-color: #f7f5f7;
+            border-left: 1px solid #5ae;
+            border-right: 1px solid #5ae;
+        }
+        .Banner{
+            background-color: #5ae;
+        }
+        .Titles{
+            height: 50px;
+            padding: 10px;
+        }
+        .Titles h1{
+            color: #fff;
+            text-align: left;
+            text-indent: 2em;
+            text-shadow: #fff 0 0 3px;
+        }
+        .NavigationBar{
+            list-style: none;
+            overflow: auto;
+            margin-top: 20px;
+        }
+        .NavigationBar li{
+            float: left;
+            /*width: 150px;*/
+            height: 30px;
+            /*margin-right: 5px;*/
+            padding: 0 5px;
+        }
+        .NavigationBar li > a{
+            color: #000;
+            text-decoration: none;
+            display: block;
+            height: 100%;
+            line-height: 25px;
+        }
+        .Footer{
+            background-color: #5ae;
+            height: 45px;
+        }
+
+        .TabMainArea .TabButton.TabFontStyleType2{
+            background-image: none;
+        }
+
+
+/* 字体方案1: 加粗白色大字体 */
+.TabFontStyleType1
+{
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+    text-shadow: #444 2px 2px 2px;
+}
+/* 字体方案2: 加粗白色字体 */
+.TabFontStyleType2,
+.NavigationBar li > a,
+.TabButton.TabFontStyleType2
+{
+    font-weight: bold;
+    /*font-size: medium;*/
+    color: #fff;
+    text-shadow: #444 2px 2px 2px;
+}
+
+/* 蓝色整体方案 */
+.TabBlockStyleBlue,
+.TabMainArea .TabButton.TabFontStyleType2,
+.TabButton.TabBlockStyleBlue.TabActive
+{
+    border: 1px solid #46b;
+    border-top-color: #adf;
+    background-color: #59d;
+    text-shadow: #35a 2px 2px 2px;
+}
+.TabBlockStyleBlue:hover,
+.TabButton.TabBlockStyleBlue:hover
+{
+    background-color: #6bf;
+}
+
+/* 绿色整体方案 */
+.TabBlockStyleGreen
+{
+    border: 1px solid #182;
+    border-top-color: #9ec;
+    background-color: #3b6;
+    text-shadow: #162 2px 2px 2px;
+}
+.TabBlockStyleGreen:hover
+{
+    background-color: #4c9;
+}
+
+/* 红色整体方案 */
+.TabBlockStyleRed
+{
+    border: 1px solid #a22;
+    border-top-color: #ecc;
+    background-color: #d44;
+    text-shadow: #622 2px 2px 2px;
+}
+.TabBlockStyleRed:hover
+{
+    background-color: #f88;
+}
