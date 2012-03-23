@@ -22,14 +22,17 @@
             background-color: #5ae;
         }
         .Titles{
-            height: 50px;
+            height: 70px;
             padding: 10px;
         }
-        .Titles h1{
+        .Titles h1,.Titles h4{
             color: #fff;
             text-align: left;
-            text-indent: 2em;
+            text-indent: 40px;
             text-shadow: #fff 0 0 3px;
+        }
+        .Titles h4{
+            text-indent: 80px;
         }
         .NavigationBar{
             list-style: none;

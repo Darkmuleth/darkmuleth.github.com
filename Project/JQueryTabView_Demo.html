@@ -3,20 +3,63 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>JQueryTabView Demo</title>
-    <link rel="stylesheet" type="text/css" href="Project/JQueryTabView/jQueryTabViewStyle_min.css">
+    <link rel="stylesheet" type="text/css" href="JQueryTabView/jQueryTabViewStyle_min.css">
     <link rel="stylesheet" type="text/css" href="../style.css">
+    <style type="text/css">
+        .Example{
+            text-align: left;
+        }
+    </style>
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <!--<script type="text/javascript" src="Project/JQueryTabView/jQueryTabView_min.js"></script>-->
-    
+    <script type="text/javascript" src="JQueryTabView/jQueryTabView_min.js"></script>
     <script type="text/javascript" src="../script.js"></script>
+
+    <script type="text/javascript">
+        function IframeAllClear(objs){
+            for(i=0; i < objs.length; i++){
+                var obj = objs.eq(i),
+                    ele = obj.get(0), 
+                    iframe = ele.contentWindow;
+                if(ele){
+                    ele.src = "about:blank";
+                    try{
+                        iframe.document.write("");
+                        iframe.document.clear();
+                    }catch(e){}
+                    obj.parent().get(0).removeChild(ele);
+                    obj = ele = iframe = void(0);
+                }
+            }
+            if(window.CollectGarbage){
+                CollectGarbage();
+            }
+        }
+
+        function JQueryTabViewAllClear(){
+            var views = $(".TabMainArea");
+
+            IframeAllClear($("iframe", views));
+
+            views.remove();
+        }
+
+        $(function(){
+
+            $(".RunJQueryTabView").click(function(){
+                JQueryTabViewAllClear();
+            });
+
+        });
+    </script>
 </head>
 <body>
     <div class="MainArea">
         <div class="Banner">
             <div class="Titles">
                 <h1>Darkmuleth</h1>
+                <h4>JQueryTabView Demo</h4>
             </div>
-            <!-- <div class="NavigationBar"></div> -->
             <ul class="NavigationBar">
                 <li class="TabBlockStyleBlue" title="返回首页">
                     <a href="../index.html">Home</a>
@@ -27,6 +70,11 @@
             </ul>
         </div>
         <div class="Content">
+            <div class="Example">
+                <h4>Example</h4>
+                <input type="button" class="RunJQueryTabView" value="Run"/>
+                <div class="TabView"></div>
+            </div>
         </div>
         <div class="Footer">
         </div>
