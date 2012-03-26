@@ -19,13 +19,13 @@ $(function(){
         if(main.outerHeight() < height){
             main.height(height);
         }
-        var content = main.find(".Content").eq(0);
-        height = main.outerHeight() - $(".Banner").eq(0).outerHeight(true) - $(".Footer").eq(0).outerHeight(true);
-        if(content.outerHeight() < height){
-            content.height(height);
-        }
+        // var content = main.find(".Content").eq(0);
+        // height = main.outerHeight() - $(".Banner").eq(0).outerHeight(true) - $(".Footer").eq(0).outerHeight(true);
+        // if(content.outerHeight() < height){
+        //     content.height(height);
+        // }
     }
-    ResetHeight();
+    // ResetHeight();
     $(window).resize(function(){
         ResetHeight();
     });
