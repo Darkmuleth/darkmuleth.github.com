@@ -10,6 +10,7 @@
             text-align: left;
             text-indent: 2em;
             margin: 10px 0;
+            padding: 0 10px;
         }
         a{
             color: #38d;
@@ -76,11 +77,11 @@
             padding: 5px;
             text-align: left;
         }
-        .Example .Wrap > p, .DefaultOption > p{
+        .Example .Wrap > .Explain , .DefaultOption .Explain {
             border: 1px solid #aaa;
             border-radius: 4px; /*圆角*/
             background-color: #fff;
-            padding: 5px;
+            margin-bottom: 5px;
         }
         .Code{
             border: 1px solid #aaa;
@@ -319,7 +320,9 @@
 
             <div class="DefaultOption">
                 <h4 class="TabFontStyleType2 TabBlockStyleGreen" title="点击收起">默认设置 <a name="DFOP" href="#TopIndex">TOP</a></h4>
-                <p>选项卡的默认设置如下所示: </p>
+                <div class="Explain">
+                    <p>选项卡的默认设置如下所示: </p>
+                </div>
                 <pre class="Code">
     {
         <span class="Note">/// 选项卡配置对象(若是多个选项卡可使用数组表示)</span>
@@ -508,7 +511,10 @@
             <div id="Ex_01" class="Example">
                 <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 01 &nbsp;&nbsp;使用默认设置<a name="Ex_a_01" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
-                    <p>本例中不进行任何额外设置, 也就是使用插件的默认设置进行初始化, 这是最简单的初始化方式. </p>
+                    <div class="Explain">
+                        <p>本例中不进行任何额外设置, 也就是使用插件的默认设置进行初始化. </p>
+                        <p>这是最简单的初始化方式.</p> 
+                    </div>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
@@ -526,7 +532,9 @@
             <div id="Ex_02" class="Example">
                 <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 02 &nbsp;&nbsp;使用 tabs 属性初始化一个选项卡<a name="Ex_a_02" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
-                    <p>本例中使用 tabs 属性初始化了一个选项卡, 选项卡的描述为: "New Tab Button", 面板内容为"&#60;p&#62;New Tab Panel&#60;/p&#62;".</p>
+                    <div class="Explain">
+                        <p>本例中使用 tabs 属性初始化了一个选项卡; 选项卡的描述为: "New Tab Button", 面板内容为"&#60;p&#62;New Tab content&#60;/p&#62;".</p>
+                    </div>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
@@ -549,7 +557,10 @@
             <div id="Ex_03" class="Example">
                 <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 03 &nbsp;&nbsp;使用 tabs 属性初始化多个选项卡<a name="Ex_a_03" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
-                    <p>通过设置 tabs 属性为数组, 可以初始化多个选项卡. 本例中初始化了三个选项卡, 描述和内容各不相同. </p>
+                    <div class="Explain">
+                        <p>通过设置 tabs 属性为数组, 可以初始化多个选项卡. </p>
+                        <p>本例中初始化了三个选项卡, 描述和内容各不相同.</p> 
+                    </div>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
