@@ -6,8 +6,45 @@
     <link rel="stylesheet" type="text/css" href="JQueryTabView/jQueryTabViewStyle_min.css">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style type="text/css">
+        p{
+            text-align: left;
+            text-indent: 2em;
+            margin: 10px 0;
+        }
+        a{
+            color: #38d;
+            text-decoration: none;
+        }
+        a:visited{
+            color: #b39;
+        }
+        a:hover{
+            color: #f33;
+            text-decoration: underline;
+        }
+        a:active{
+            color: #3d3;
+        }
+        .Index{
+            background-color: #f7f7f7;
+        }
+        .Index > div{
+            margin: 10px;
+        }
+        .IndexList{
+            text-shadow: #ddd 0px 0px 2px;
+            text-align: left;
+            margin-left: 30px;
+        }
+        .IndexList ul{
+            list-style: decimal;
+            margin-left: 30px;
+        }
         .DefaultOption > *{
             margin: 5px;
+        }
+        .DefaultOption h4{
+            cursor: pointer;
         }
         .DefaultOption .Code{
             text-align: left;
@@ -17,15 +54,12 @@
             margin-top: 10px;
             border-top: 1px solid #5ae;
             border-bottom: 1px solid #5ae;
-            background-color: #eee;
+            background-color: #fafafa;
         }
-        .Example h4, .DefaultOption>h4{
+        .Example h4, .Index h4, .DefaultOption>h4{
             margin: 0;
             padding: 5px;
             text-align: left;
-        }
-        .Example a{
-            text-decoration: none;
         }
         h4 a{
             text-decoration: none;
@@ -42,16 +76,24 @@
             padding: 5px;
             text-align: left;
         }
+        .Example .Wrap > p, .DefaultOption > p{
+            border: 1px solid #aaa;
+            border-radius: 4px; /*圆角*/
+            background-color: #fff;
+            padding: 5px;
+        }
         .Code{
-            background-color: #dfdfdf;
+            border: 1px solid #aaa;
+            border-radius: 4px; /*圆角*/
+            background-color: #f3f3f3;
             padding: 5px;
             font-size: 14px;
             text-shadow: #99a 1px 1px 2px;
             font-family: "宋体", "Times New Roman", "MS Trebuchet", sans-serif;
         }
         .Example:hover .Code{
-            background-color: #fed;
-            text-shadow: #a99 1px 1px 2px;
+            background-color: #ffefe3;
+            text-shadow: #ba9 0px 0px 2px;
         }
         .Example .RunJQueryTabView{
             width: 150px;
@@ -87,7 +129,8 @@
         }
     </style>
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="../jquery-1.7.min.js"></script>
     <script type="text/javascript" src="JQueryTabView/jQueryTabView_min.js"></script>
     <script type="text/javascript" src="../script.js"></script>
 
@@ -125,6 +168,30 @@
 
         $(function(){
 
+            var dfTitle = $(".DefaultOption h4");
+            var dfCode = dfTitle.nextAll(".Code");
+            var codeHeight = dfCode.height();
+            dfTitle.toggle(function(e){
+                if(e.target != dfTitle.get(0)){
+                    return;
+                }
+                if(!dfCode.is(":animated")){
+                    dfTitle.attr("title", "点击展开");
+                    dfCode.animate({height: 0}, "slow", function(){
+                        dfCode.hide();
+                    });
+                }
+            }, function(e){
+                if(e.target != dfTitle.get(0)){
+                    return;
+                }
+                if(!dfCode.is(":animated")){
+                    dfTitle.attr("title", "点击收起");
+                    dfCode.show();
+                    dfCode.animate({height: codeHeight}, "slow");
+                }
+            });
+
             function HaveView(area){
                 if(area.find(".TabMainArea").length > 0){
                     return true;
@@ -144,20 +211,29 @@
                 wrap.append("<div class='TabView'/>");
             });
 
+            function GoTo( obj ){
+                // 转到对应锚记
+                window.location.href = "#" + obj.parents(".Example").children("h4").children("a").attr("name");
+                // window.location.href = obj.parents(".Wrap").eq(0).find(".ShowLink").attr("href");
+            }
 
             // 示例 01
             $("#Ex_01_btn").click(function(){
-                var viewArea = $(this).parents(".Wrap").eq(0).children(".TabView");
+                var obj = $(this);
+                var viewArea = obj.parents(".Wrap").eq(0).children(".TabView");
                 if(HaveView(viewArea)){
                     return false;
                 }
                 // 生成选项卡插件
-                viewArea.JQueryTabView();
+                viewArea.JQueryTabView({
+                    // Note: 此处设置了onReady事件只是为了实现该Demo页面的特殊功能
+                    onReady: function(){GoTo(obj);}});
             });
 
             // 示例 02
             $("#Ex_02_btn").click(function(){
-                var viewArea = $(this).parents(".Wrap").eq(0).children(".TabView");
+                var obj = $(this);
+                var viewArea = obj.parents(".Wrap").eq(0).children(".TabView");
                 if(HaveView(viewArea)){
                     return false;
                 }
@@ -165,14 +241,16 @@
                 viewArea.JQueryTabView({
                     tabs:{
                         caption: "New Tab Button",
-                        content: "<p>New Tab Panel</p>"
-                    }
+                        content: "<p>New Tab content</p>"
+                    },
+                    onReady: function(){GoTo(obj);}
                 });
             });
 
             // 示例 03
             $("#Ex_03_btn").click(function(){
-                var viewArea = $(this).parents(".Wrap").eq(0).children(".TabView");
+                var obj = $(this);
+                var viewArea = obj.parents(".Wrap").eq(0).children(".TabView");
                 if(HaveView(viewArea)){
                     return false;
                 }
@@ -180,16 +258,18 @@
                 viewArea.JQueryTabView({
                     tabs:[{
                         caption: "Tab 1",
-                        content: "<p>Tab 1 Panel</p>"
+                        content: "<p>Tab 1 content</p>"
                     },{
                         caption: "Tab 2",
-                        content: "<p>Tab 2 Panel</p>"
+                        content: "<p>Tab 2 content</p>"
                     },{
                         caption: "Tab 3",
-                        content: "<p>Tab 3 Panel</p>"
-                    }]
+                        content: "<p>Tab 3 content</p>"
+                    }],
+                    onReady: function(){GoTo(obj);}
                 });
             });
+
 
         });
     </script>
@@ -215,9 +295,31 @@
         </div>
         <div class="Content">
             <a name="TopIndex"></a>
+            <div class="Index">
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen">索引</h4>
+                <div>
+                    <ul class="IndexList">
+                        <li>
+                            <a href="#Ex_a_01">简单使用</a>
+                            <ul>
+                                <li>
+                                    <a href="#Ex_a_01">Example 01 &nbsp;&nbsp;使用默认设置</a>
+                                </li>
+                                <li>
+                                    <a href="#Ex_a_02">Example 02 &nbsp;&nbsp;使用tabs属性初始化一个选项卡</a>
+                                </li>
+                                <li>
+                                    <a href="#Ex_a_02">Example 03 &nbsp;&nbsp;使用tabs属性初始化多个选项卡</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="DefaultOption">
-                <h4 class="TabFontStyleType2 TabBlockStyleGreen">默认设置 <a name="DFOP" href="#TopIndex">TOP</a></h4>
-                <p></p>
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen" title="点击收起">默认设置 <a name="DFOP" href="#TopIndex">TOP</a></h4>
+                <p>选项卡的默认设置如下所示: </p>
                 <pre class="Code">
     {
         <span class="Note">/// 选项卡配置对象(若是多个选项卡可使用数组表示)</span>
@@ -283,16 +385,21 @@
             <span class="Note">/////////////////// 以下是事件设置 ////////////////////
             // 点击选项卡事件, 此事件将导致选项卡激活
             // 若返回false, 则点击事件中断, 后续的激活操作将被忽略
-            // onClick : function(api, content, panel, event){}
-            // api : 插件的api引用
-            // content : 选项卡对应的面板对象的'内容'对象,如果usePanel为false, 则值为null
-            // panel : 选项卡对应的面板对象,如果usePanel为false, 则值为null
-            // event : jQuery的点击事件所传递的event对象</span>
+            // onClick: function(api, content, panel, event){}
+            // api: 插件的api引用
+            // content: 选项卡对应的面板对象的'内容'对象,如果usePanel为false, 则值为null
+            // panel: 选项卡对应的面板对象,如果usePanel为false, 则值为null
+            // event: jQuery的点击事件所传递的event对象</span>
             onClick : null,
-            <span class="Note">// 激活选项卡事件; 发生在onClick事件之后,onTabActived事件之前,
+            <span class="Note">// 激活选项卡事件; 发生在onClick事件之后,onClicked事件之前,
+            // 不管使用者是否点击了选项卡按钮,只要选项卡正常激活,此事件都会发生
             // 若返回false, 则激活事件中断, 后续的激活操作将被忽略
             // 函数形式与点击事件相同(其中函数的event参数当且仅当onActive事件是直接由选项卡按产生时才会存在)</span>
             onActive : null,
+            <span class="Note">// 点击选项卡后事件
+            // 若返回false, 则点击事件中断, 后续的事件将被忽略
+            // 函数形式与点击事件相同</span>
+            onClicked: null,
             <span class="Note">// 关闭选项卡事件
             // 函数形式与点击事件相同</span>
             onClose : null
@@ -362,17 +469,17 @@
         <span class="Note">/// debug模式(开启后将向浏览器控制台打印信息)</span>
         debug : false,
         <span class="Note">/////////////////// 以下是事件设置 ////////////////////
-        /// 所有选项卡按钮的默认'激活'事件, 发生在选项卡的onActive事件之前; 
+        /// 所有选项卡按钮的默认'点击'事件, 发生在选项卡的onClick事件之前; 
         /// 若返回false, 则激活事件中断, 后续的激活操作将被忽略
-        /// onTabActive : function(api, content, panel, event){}
-        /// api : 插件的api引用
-        /// content : 选项卡对应的面板对象的'内容'对象,如果usePanel为false, 则值为null
-        /// panel : 选项卡对应的面板对象,如果usePanel为false, 则值为null
-        /// event : jQuery的点击事件所传递的event对象</span>
-        onTabActive : null,
-        <span class="Note">/// 所有选项卡按钮的默认'激活后'事件, 发生在选项卡的onActive事件之后
+        /// onTabClick: function(api, content, panel, event){}
+        /// api: 插件的api引用
+        /// content: 选项卡对应的面板对象的'内容'对象,如果usePanel为false, 则值为null
+        /// panel: 选项卡对应的面板对象,如果usePanel为false, 则值为null
+        /// event: jQuery的点击事件所传递的event对象</span>
+        onTabClick : null,
+        <span class="Note">/// 所有选项卡按钮的默认'激活后'事件, 发生在选项卡的onClicked事件之后
         /// (函数形式与'点击'事件相同, 下同)</span>
-        onTabActived : null,
+        onTabClicked : null,
         <span class="Note">/// 所有选项卡按钮的默认'关闭'事件, 发生在选项卡的onClose事件之前; 
         /// 若返回false, 则关闭事件中断, 后续的关闭操作将被忽略</span>
         onTabClose : null,
@@ -399,8 +506,9 @@
             </div>
 
             <div id="Ex_01" class="Example">
-                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 01 <a name="Ex_a_01" href="#TopIndex">TOP</a></h4>
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 01 &nbsp;&nbsp;使用默认设置<a name="Ex_a_01" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
+                    <p>本例中不进行任何额外设置, 也就是使用插件的默认设置进行初始化, 这是最简单的初始化方式. </p>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
@@ -410,15 +518,15 @@
     });
 &#60;/script&#62;
                     </pre>
-                    <a href="#Ex_a_01" class="ShowLink">
-                        <input id="Ex_01_btn" type="button" class="RunJQueryTabView" value="Run"/>
-                    </a>
+                    <!-- <a href="#Ex_a_01" class="ShowLink"></a> -->
+                    <input id="Ex_01_btn" type="button" class="RunJQueryTabView" value="Run"/>
                 </div>
             </div>
 
             <div id="Ex_02" class="Example">
-                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 02 <a name="Ex_a_02" href="#TopIndex">TOP</a></h4>
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 02 &nbsp;&nbsp;使用 tabs 属性初始化一个选项卡<a name="Ex_a_02" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
+                    <p>本例中使用 tabs 属性初始化了一个选项卡, 选项卡的描述为: "New Tab Button", 面板内容为"&#60;p&#62;New Tab Panel&#60;/p&#62;".</p>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
@@ -426,22 +534,22 @@
         $(".TabView").JQueryTabView({
             tabs:{
                 caption : "New Tab Button",
-                content : "&#60;p&#62;New Tab Panel&#60;/p&#62;"
+                content : "&#60;p&#62;New Tab content&#60;/p&#62;"
             }
         });
 
     });
 &#60;/script&#62;
                     </pre>
-                    <a href="#Ex_a_02" class="ShowLink">
-                        <input id="Ex_02_btn" type="button" class="RunJQueryTabView" value="Run"/>
-                    </a>
+                    <!-- <a href="#Ex_a_02" class="ShowLink"></a> -->
+                    <input id="Ex_02_btn" type="button" class="RunJQueryTabView" value="Run"/>
                 </div>
             </div>
 
             <div id="Ex_03" class="Example">
-                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 03 <a name="Ex_a_03" href="#TopIndex">TOP</a></h4>
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 03 &nbsp;&nbsp;使用 tabs 属性初始化多个选项卡<a name="Ex_a_03" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
+                    <p>通过设置 tabs 属性为数组, 可以初始化多个选项卡. 本例中初始化了三个选项卡, 描述和内容各不相同. </p>
                     <pre class="Code">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
@@ -449,22 +557,21 @@
         $(".TabView").JQueryTabView({
             tabs:[{
                 caption : "Tab 1",
-                content : "&#60;p&#62;Tab 1 Panel&#60;/p&#62;"
+                content : "&#60;p&#62;Tab 1 content&#60;/p&#62;"
             },{
                 caption : "Tab 2",
-                content : "&#60;p&#62;Tab 2 Panel&#60;/p&#62;"
+                content : "&#60;p&#62;Tab 2 content&#60;/p&#62;"
             },{
                 caption : "Tab 3",
-                content : "&#60;p&#62;Tab 3 Panel&#60;/p&#62;"
+                content : "&#60;p&#62;Tab 3 content&#60;/p&#62;"
             }]
         });
 
     });
 &#60;/script&#62;
                     </pre>
-                    <a href="#Ex_a_03" class="ShowLink">
-                        <input id="Ex_03_btn" type="button" class="RunJQueryTabView" value="Run"/>
-                    </a>
+                    <!-- <a href="#Ex_a_03" class="ShowLink"></a> -->
+                    <input id="Ex_03_btn" type="button" class="RunJQueryTabView" value="Run"/>
                 </div>
             </div>
 
