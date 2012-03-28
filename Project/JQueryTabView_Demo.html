@@ -13,11 +13,11 @@
             padding: 0 10px;
         }
         a{
-            color: #38d;
+            color: #38f;
             text-decoration: none;
         }
         a:visited{
-            color: #b39;
+            color: #38f;
         }
         a:hover{
             color: #f33;
@@ -89,12 +89,31 @@
             background-color: #f3f3f3;
             padding: 5px;
             font-size: 14px;
-            text-shadow: #99a 1px 1px 2px;
             font-family: "宋体", "Times New Roman", "MS Trebuchet", sans-serif;
+            position: relative;
         }
         .Example:hover .Code{
             background-color: #ffefe3;
-            text-shadow: #ba9 0px 0px 2px;
+            text-shadow: #cba 0px 0px 2px;
+            overflow: hidden;
+        }
+        .CodeName{
+            /*position: relative;*/
+            display: block;
+            border: 1px solid transparent;
+            border-radius: 4px; /*圆角*/
+            color: #fff;
+            font-weight: bold;
+            background-color: #222;
+            width: 100%;
+            height: 1.5em;
+            top: 0;
+            text-indent: 2em;
+            cursor: pointer;
+        }
+        .CodeName:hover{
+            background-color: #800;
+            text-shadow: #f00 0px 0px 3px;
         }
         .Example .RunJQueryTabView{
             width: 150px;
@@ -127,6 +146,10 @@
         span.Note{
             color: #181;
             text-shadow: #ada 0px 0px 2px;
+        }
+        .Alert{
+            color: #f20;
+            text-shadow: #e89 1px 1px 2px;
         }
     </style>
 
@@ -169,6 +192,7 @@
 
         $(function(){
 
+            // 为 '默认设置' 栏绑定收/放功能
             var dfTitle = $(".DefaultOption h4");
             var dfCode = dfTitle.nextAll(".Code");
             var codeHeight = dfCode.height();
@@ -192,6 +216,29 @@
                     dfCode.animate({height: codeHeight}, "slow");
                 }
             });
+            // 为所有'代码名称'栏绑定收/放功能
+            var codeName = $(".CodeName");
+            codeName.each(function(){
+                var cName = $(this);
+                cName.data("MaxHeight", cName.parent(".Code").height());
+                // cName.data("MinHeight", cName.height());
+            });
+            codeName.toggle(function(){
+                    var code = $(this).parent(".Code");
+                    if(!code.is(":animated")){
+                        // 收缩
+                        code.animate({height: $(this).height() + 3}, "slow", function(){ code.children(".CodeText").hide(); });
+                    }
+                }, function(){
+                    var obj = $(this);
+                    var code = obj.parent(".Code");
+                    if(!code.is(":animated")){
+                        code.children(".CodeText").show();
+                        // 展开
+                        code.animate({height: obj.data("MaxHeight")}, "slow");
+                    }
+                });
+
 
             function HaveView(area){
                 if(area.find(".TabMainArea").length > 0){
@@ -200,7 +247,7 @@
                     return false;
                 }
             }
-
+            // 为所有的 运行 按钮绑定清理选项卡插件的功能
             $(".RunJQueryTabView").click(function(){
                 var wrap = $(this).parents(".Wrap").eq(0);
                 if(HaveView(wrap)){
@@ -217,6 +264,8 @@
                 window.location.href = "#" + obj.parents(".Example").children("h4").children("a").attr("name");
                 // window.location.href = obj.parents(".Wrap").eq(0).find(".ShowLink").attr("href");
             }
+
+            ////////////////////////////// 开始绑定演示功能 ////////////////////////////////
 
             // 示例 01
             $("#Ex_01_btn").click(function(){
@@ -271,6 +320,30 @@
                 });
             });
 
+            // 示例 04
+            $("#Ex_04_btn").click(function(){
+                var obj = $(this);
+                var viewArea = obj.parents(".Wrap").eq(0).children(".TabView");
+                if(HaveView(viewArea)){
+                    return false;
+                }
+                // 生成选项卡插件
+                viewArea.JQueryTabView({
+                    tabs:[{
+                        caption: "Tab 1",
+                        content: "<p>Tab 1 content</p>"
+                    },{
+                        caption: "Tab 2",
+                        content: "<p>Tab 2 content</p>",
+                        active: true
+                    },{
+                        caption: "Tab 3",
+                        content: "<p>Tab 3 content</p>"
+                    }],
+                    onReady: function(){GoTo(obj);}
+                });
+            });
+
 
         });
     </script>
@@ -307,10 +380,13 @@
                                     <a href="#Ex_a_01">Example 01 &nbsp;&nbsp;使用默认设置</a>
                                 </li>
                                 <li>
-                                    <a href="#Ex_a_02">Example 02 &nbsp;&nbsp;使用tabs属性初始化一个选项卡</a>
+                                    <a href="#Ex_a_02">Example 02 &nbsp;&nbsp;使用 tabs 属性初始化一个选项卡</a>
                                 </li>
                                 <li>
-                                    <a href="#Ex_a_02">Example 03 &nbsp;&nbsp;使用tabs属性初始化多个选项卡</a>
+                                    <a href="#Ex_a_03">Example 03 &nbsp;&nbsp;使用 tabs 属性初始化多个选项卡</a>
+                                </li>
+                                <li>
+                                    <a href="#Ex_a_04">Example 04 &nbsp;&nbsp;使用 tabs 中的 active 属性设置默认激活的选项卡</a>
                                 </li>
                             </ul>
                         </li>
@@ -516,13 +592,14 @@
                         <p>这是最简单的初始化方式.</p> 
                     </div>
                     <pre class="Code">
+<span class="CodeText">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
 
         $(".TabView").JQueryTabView();
 
     });
-&#60;/script&#62;
+&#60;/script&#62;</span>
                     </pre>
                     <!-- <a href="#Ex_a_01" class="ShowLink"></a> -->
                     <input id="Ex_01_btn" type="button" class="RunJQueryTabView" value="Run"/>
@@ -533,9 +610,11 @@
                 <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 02 &nbsp;&nbsp;使用 tabs 属性初始化一个选项卡<a name="Ex_a_02" href="#TopIndex">TOP</a></h4>
                 <div class="Wrap">
                     <div class="Explain">
-                        <p>本例中使用 tabs 属性初始化了一个选项卡; 选项卡的描述为: "New Tab Button", 面板内容为"&#60;p&#62;New Tab content&#60;/p&#62;".</p>
+                        <p>本例中使用 tabs 属性初始化了一个选项卡;</p>
+                        <p>选项卡的描述为: "New Tab Button", 面板内容为"&#60;p&#62;New Tab content&#60;/p&#62;".</p>
                     </div>
                     <pre class="Code">
+<span class="CodeText">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
 
@@ -547,7 +626,7 @@
         });
 
     });
-&#60;/script&#62;
+&#60;/script&#62;</span>
                     </pre>
                     <!-- <a href="#Ex_a_02" class="ShowLink"></a> -->
                     <input id="Ex_02_btn" type="button" class="RunJQueryTabView" value="Run"/>
@@ -562,6 +641,7 @@
                         <p>本例中初始化了三个选项卡, 描述和内容各不相同.</p> 
                     </div>
                     <pre class="Code">
+<span class="CodeText">
 &#60;script type=&#34;text/javascript&#34;&#62;
     $(document).ready(function(){
 
@@ -579,13 +659,48 @@
         });
 
     });
-&#60;/script&#62;
+&#60;/script&#62;</span>
                     </pre>
                     <!-- <a href="#Ex_a_03" class="ShowLink"></a> -->
                     <input id="Ex_03_btn" type="button" class="RunJQueryTabView" value="Run"/>
                 </div>
             </div>
 
+            <div id="Ex_04" class="Example">
+                <h4 class="TabFontStyleType2 TabBlockStyleGreen">Example 04 &nbsp;&nbsp;使用 tabs 中的 active 属性设置默认激活的选项卡
+                    <a name="Ex_a_04" href="#TopIndex">TOP</a></h4>
+                <div class="Wrap">
+                    <div class="Explain">
+                        <p>通过设置 tabs 属性中的 active 属性为 true, 可以将对应的选项卡设置为默认激活. </p>
+                        <p>在前面的例子中初始化后的选项卡都没有被激活, 所以一开始在面板中并没有显示任何内容, 需要用户点击了某个选项卡后, 面板才会显示对应选项卡的内容. </p> 
+                        <p>将 Example 03 的代码稍作改动, 为第二个选项卡添加 active 属性, 并将其值设置为 true, 那么运行示例后将可以看到: 选项卡2已经是激活状态, 并且面板中马上显示出了选项卡2的内容.</p>
+                        <p class="Alert">注意: 虽然你可以同时为多个选项卡设置 active 为 true , 但最终只会有一个起作用, 建议不要为多个选项卡同时设置值为 true 的 active 属性.</p>
+                    </div>
+                    <pre class="Code">
+<span class="CodeText">
+&#60;script type=&#34;text/javascript&#34;&#62;
+    $(document).ready(function(){
+
+        $(".TabView").JQueryTabView({
+            tabs:[{
+                caption : "Tab 1",
+                content : "&#60;p&#62;Tab 1 content&#60;/p&#62;"
+            },{
+                caption : "Tab 2",
+                content : "&#60;p&#62;Tab 2 content&#60;/p&#62;",
+                active: true
+            },{
+                caption : "Tab 3",
+                content : "&#60;p&#62;Tab 3 content&#60;/p&#62;"
+            }]
+        });
+
+    });
+&#60;/script&#62;</span>
+                    </pre>
+                    <input id="Ex_04_btn" type="button" class="RunJQueryTabView" value="Run"/>
+                </div>
+            </div>
 
 
 
